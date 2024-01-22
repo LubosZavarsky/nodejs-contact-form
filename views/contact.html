@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
+    />
+    <title>Contact form</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+  </head>
+  <body class="container">
+    <h1>Contact form</h1>
+    <form>
+      <div class="grid">
+        <label for="yourname">
+          Name
+          <input
+            type="text"
+            id="yourname"
+            name="yourname"
+            placeholder="Your name"
+            required
+          />
+        </label>
+
+        <label for="youremail">
+          Email
+          <input
+            type="email"
+            id="youremail"
+            name="youremail"
+            placeholder="Your email"
+            required
+          />
+        </label>
+      </div>
+
+      <label for="yoursubject">
+        Subject
+        <input
+          type="text"
+          id="yoursubject"
+          name="yoursubject"
+          placeholder="Subject"
+          required
+        />
+      </label>
+
+      <label for="yourmessage">Message</label>
+      <textarea
+        type="yourmessage"
+        id="yourmessage"
+        name="yourmessage"
+        placeholder="Your message"
+        required
+      ></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const myFormData = new FormData(e.target);
+        const formDataObj = JSON.stringify(
+          Object.fromEntries(myFormData.entries())
+        );
+
+        try {
+          const response = await fetch("/contact", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: formDataObj,
+          });
+
+          const data = await response.json();
+          console.log(data);
+
+          Toastify({
+            text: data,
+            duration: 2000,
+            newWindow: true,
+            gravity: "top",
+            position: "right",
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+          }).showToast();
+        } catch (error) {
+          console.log(error);
+          Toastify({
+            text: "There was an error",
+            duration: 2000,
+            newWindow: true,
+            gravity: "top",
+            position: "right",
+            style: {
+              background: "#d84919",
+            },
+          }).showToast();
+        }
+        form.reset();
+      });
+    </script>
+  </body>
+</html>

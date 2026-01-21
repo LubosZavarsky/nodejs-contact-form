@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiterUsingThirdParty);
 
 const __dirname = new URL(".", import.meta.url).pathname;
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + "public"));
 
 app.get("/", (req, res) => {
   res.status(200).send("✅");

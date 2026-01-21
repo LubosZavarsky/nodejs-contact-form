@@ -55,7 +55,6 @@
 
       <label for="yourmessage">Message</label>
       <textarea
-        type="yourmessage"
         id="yourmessage"
         name="yourmessage"
         placeholder="Your message"
@@ -89,7 +88,10 @@
           });
 
           const data = await response.json();
-          console.log(data);
+
+          if (!response.ok) {
+            throw new Error(data || "Request failed");
+          }
 
           Toastify({
             text: data,
@@ -102,9 +104,8 @@
             },
           }).showToast();
         } catch (error) {
-          console.log(error);
           Toastify({
-            text: "There was an error",
+            text: error.message || "There was an error",
             duration: 2000,
             newWindow: true,
             gravity: "top",
